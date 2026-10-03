@@ -66,7 +66,11 @@ esac
 echo "Installing mobox"
 
 function wget-git-q {
-    wget -q --retry-connrefused --tries=0 "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
+    if [ "$1" = "package-manager" ]; then
+        wget -q --timeout=30 --tries=3 "https://raw.githubusercontent.com/syas-sys/mobox/main/package-manager" -O $2
+    else
+        wget -q --retry-connrefused --tries=0 "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
+    fi
     return $?
 }
 
