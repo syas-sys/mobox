@@ -1,0 +1,157 @@
+#!/bin/bash
+
+. $PREFIX/glibc/opt/package-manager/token
+
+declare -A packages_list=(
+	      [box64-binaries]=10
+	                [dxvk]=2
+	        [glibc-prefix]=2
+	         [prefix-apps]=2
+	             [scripts]=27
+	              [turnip]=8
+	          [virgl-mesa]=1
+	             [wined3d]=1
+  [wine-9.0-staging-wow64]=1
+ [wine-8.18-staging-wow64]=1
+ [wine-8.18-vanilla-wow64]=1
+  [wine-9.1-vanilla-wow64]=2
+  [wine-9.2-vanilla-wow64]=1
+  [wine-9.3-vanilla-wow64]=1
+                 [libudev]=1
+            [en-ru-locale]=1
+)
+declare -a base_packages=(\
+	box64-binaries \
+	dxvk \
+	glibc-prefix \
+	prefix-apps \
+	scripts \
+	turnip \
+	virgl-mesa \
+	wined3d \
+	libudev \
+	en-ru-locale \
+)
+declare -a wine_packages=(\
+	wine-9.0-staging-wow64 \
+	wine-8.18-staging-wow64 \
+	wine-8.18-vanilla-wow64 \
+	wine-9.1-vanilla-wow64 \
+	wine-9.2-vanilla-wow64 \
+	wine-9.3-vanilla-wow64 \
+)
+declare -a outdated_packages=(\
+	d3d \
+	mesa \
+	wine-ge-custom-8-25 \
+)
+
+function wget-git {
+        if [ "$1" = "scripts.tar.xz" ]; then
+                wget --show-progress -q --timeout=30 --tries=3 "https://raw.githubusercontent.com/syas-sys/mobox/main/packages/scripts.tar.xz" -O $2
+        else
+                wget --show-progress -q --timeout=6 --retry-connrefused --tries=0 "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
+        fi
+        return $?
+}
+function wget-git-q {
+	wget -q --timeout=6 --retry-connrefused --tries=0 "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
+	return $?
+}
+
+function remove-package {
+	if [ -e "$PREFIX/glibc/opt/package-manager/installed/$1" ] && [ -s "$PREFIX/glibc/opt/package-manager/installed/$1_lists" ]; then
+		echo "Removing $1"
+		while read i; do
+			rm -rf "$PREFIX/$i" &>/dev/null
+		done < "$PREFIX/glibc/opt/package-manager/installed/$1_lists"
+		rm -rf "$PREFIX/glibc/opt/package-manager/installed/$1"
+		rm -rf "$PREFIX/glibc/opt/package-manager/installed/$1_lists"
+		rm -rf "$PREFIX/glibc/opt/package-manager/installed/$1_md5"
+		if [[ ${wine_packages[@]} =~ $1 ]]; then
+			echo "Removing $1 prefix"
+			rm -rf "$PREFIX/glibc/$1"
+		fi
+	fi
+}
+
+function sync-package {
+	if [ -e "$PREFIX/glibc/opt/package-manager/installed/$1" ]; then
+		local_version=$(cat "$PREFIX/glibc/opt/package-manager/installed/$1")
+	else
+		local_version=0
+	fi
+	version=${packages_list[$1]}
+	if ((version > local_version)); then
+		
+		mkdir -p $PREFIX/glibc/opt/package-manager/temp
+		wget-git "$1.tar.xz" "$PREFIX/glibc/opt/package-manager/temp/$1.tar.xz"
+		if [ "$?" = "0" ]; then
+			rm -rf "$PREFIX/glibc/opt/package-manager/temp/$1" &>/dev/null
+			mkdir -p "$PREFIX/glibc/opt/package-manager/temp/$1"
+			tar -xf "$PREFIX/glibc/opt/package-manager/temp/$1.tar.xz" -C "$PREFIX/glibc/opt/package-manager/temp/$1" &>/dev/null
+			remove-package $1
+			echo "Updating $1"
+			find "$PREFIX/glibc/opt/package-manager/temp/$1" -type f | sed "s|^/data/data/com.termux/files/usr/glibc/opt/package-manager/temp/$1/||">"$PREFIX/glibc/opt/package-manager/installed/$1_lists" 2>/dev/null
+			md5deep -sr "$PREFIX/glibc/opt/package-manager/temp/$1" | sed "s| /data/data/com.termux/files/usr/glibc/opt/package-manager/temp/$1/| |">"$PREFIX/glibc/opt/package-manager/installed/$1_md5" 2>/dev/null
+			cp -rf "$PREFIX/glibc/opt/package-manager/temp/$1/glibc" $PREFIX &>/dev/null
+			echo "$version">"$PREFIX/glibc/opt/package-manager/installed/$1"
+		else
+			echo "Couldn't update $1: download failed"
+			rm "$PREFIX/glibc/opt/package-manager/temp/$1.tar.xz" &>/dev/null
+			rm -rf "$PREFIX/glibc/opt/package-manager/temp/$1" &>/dev/null
+			return 1
+		fi
+		rm "$PREFIX/glibc/opt/package-manager/temp/$1.tar.xz" &>/dev/null
+		rm -rf "$PREFIX/glibc/opt/package-manager/temp/$1" &>/dev/null
+	fi
+	return 0
+}
+
+function validate-package {
+	echo "Checking md5 for $1"
+	if [ ! -e "$PREFIX/glibc/opt/package-manager/installed/$1_md5" ]; then
+		echo "$1 md5 not found"
+		return 1
+	fi
+	cd $PREFIX
+	md5sum --quiet -c "$PREFIX/glibc/opt/package-manager/installed/$1_md5"
+	if [ "$?" = "0" ]; then
+		cd
+		echo "OK"
+	else
+		cd
+		echo "Mismatch"
+		rm -rf "$PREFIX/glibc/opt/package-manager/installed/$1"
+		sync-package $1
+	fi
+}
+
+function sync-all {
+	echo "Syncing packages"
+	mkdir -p $PREFIX/glibc/opt/package-manager/installed
+	for i in "${outdated_packages[@]}"; do
+		remove-package $i
+	done
+	for i in "${base_packages[@]}"; do
+		sync-package $i
+	done
+	for i in "${wine_packages[@]}"; do
+		if [ -e "$PREFIX/glibc/opt/package-manager/installed/$i" ]; then
+			sync-package $i
+		fi
+	done
+}
+
+function validate-all {
+	echo "Validating packages"
+	mkdir -p $PREFIX/glibc/opt/package-manager/installed
+	for i in "${base_packages[@]}"; do
+		validate-package $i
+	done
+	for i in "${wine_packages[@]}"; do
+		if [ -e "$PREFIX/glibc/opt/package-manager/installed/$i" ]; then
+			validate-package $i
+		fi
+	done
+}

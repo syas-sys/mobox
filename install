@@ -66,8 +66,8 @@ esac
 echo "Installing mobox"
 
 function wget-git-q {
-    if [ "$1" = "package-manager" ]; then
-        wget -q --timeout=30 --tries=3 "https://raw.githubusercontent.com/syas-sys/mobox/main/package-manager" -O $2
+    if [ "$1" = "package-manager" ] || [ "$1" = "package-manager-wow64" ]; then
+        wget -q --timeout=30 --tries=3 "https://raw.githubusercontent.com/syas-sys/mobox/main/$1" -O $2
     else
         wget -q --retry-connrefused --tries=0 "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
     fi
@@ -84,7 +84,13 @@ echo "PROJECT_ID=52465323">$PREFIX/glibc/opt/package-manager/token
 fi
 
 . $PREFIX/glibc/opt/package-manager/token
-if ! wget-git-q "package-manager" "$PREFIX/glibc/opt/package-manager/package-manager"; then
+if [ "$INSTALL_WOW64" = "1" ]; then
+    PACKAGE_MANAGER_FILE="package-manager-wow64"
+else
+    PACKAGE_MANAGER_FILE="package-manager"
+fi
+
+if ! wget-git-q "$PACKAGE_MANAGER_FILE" "$PREFIX/glibc/opt/package-manager/package-manager"; then
     echo "Download failed"
     return 1
 fi
