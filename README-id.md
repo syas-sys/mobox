@@ -24,7 +24,6 @@ English
 1. Install
 [Termux](https://f-droid.org/repo/com.termux_118.apk),
 [Termux-X11](https://raw.githubusercontent.com/olegos2/mobox/main/components/termux-x11.apk) and
-[Input Bridge](https://raw.githubusercontent.com/olegos2/mobox/main/components/inputbridge.apk).
 
 2. Buka termux dan tempel perintah
 
@@ -59,7 +58,6 @@ Jika Anda memiliki root, Anda dapat menggunakan OOM Adjuster yang berguna jika p
 * `Show additional keyboard` OFF
 * `Prefer scancodes when possible` ON
 ## Kontrol
-Untuk kontrol sentuh, aplikasi Input Bridge diperlukan
 ## Uninstall
 Untuk menghapus instalasi mobox, gunakan menu `Backup and Restore`.
 ## Men-debug

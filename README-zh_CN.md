@@ -19,7 +19,6 @@
 `Mobox` 是一个旨在使用 [Box64](https://github.com/ptitSeb/box64) 和 [Wine](https://www.winehq.org/) 在 [Termux](https://github.com/termux/termux-app) 中运行 Windows x86 应用程序的项目。
 
 # 安装
-1. 安装 [Termux](https://f-droid.org/repo/com.termux_118.apk)、[Termux-X11](https://raw.githubusercontent.com/olegos2/mobox/main/components/termux-x11.apk) 和 [Input Bridge](https://raw.githubusercontent.com/olegos2/mobox/main/components/inputbridge.apk)。
 
 2. 打开 termux 并粘贴以下命令
 
@@ -54,7 +53,6 @@ Mesa VirGL、Turnip、Wine Mono 和 Gecko 可以在 Wine Start Menu 中安装。
 * `Show additional keyboard` 关闭
 * `Prefer scancodes when possible` 打开
 ## 控制
-对于触摸控制，需要 Input Bridge 应用程序
 ## 卸载
 要卸载 mobox，请使用 `Backup and restore` 菜单。
 ## 调试

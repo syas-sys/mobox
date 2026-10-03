@@ -24,7 +24,6 @@ English
 1. Install
 [Termux](https://f-droid.org/repo/com.termux_118.apk),
 [Termux-X11](https://raw.githubusercontent.com/olegos2/mobox/main/components/termux-x11.apk) and
-[Input Bridge](https://raw.githubusercontent.com/olegos2/mobox/main/components/inputbridge.apk).
 
 2. Open termux and paste command
 
@@ -59,7 +58,6 @@ If you have root, then you can use OOM Adjuster which is useful if low memory ki
 * `Show additional keyboard` OFF
 * `Prefer scancodes when possible` ON
 ## Controls
-For touch controls Input Bridge app is required
 ## Uninstall
 To uninstall mobox, use `Backup and restore` menu.
 ## Debugging

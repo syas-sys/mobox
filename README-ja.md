@@ -22,7 +22,6 @@
 1. インストール
 [Termux](https://f-droid.org/repo/com.termux_118.apk),
 [Termux-X11](https://raw.githubusercontent.com/olegos2/mobox/main/components/termux-x11.apk) and
-[Input Bridge](https://raw.githubusercontent.com/olegos2/mobox/main/components/inputbridge.apk).
 
 2. termuxを開き、コマンドを貼り付ける
 
@@ -57,7 +56,6 @@ root があれば、OOM Adjuster を使うことができ、メモリ不足でte
 * `Show additional keyboard` OFF
 * `Prefer scancodes when possible` ON
 ## 操作方法
-タッチコントロールには Input Bridge アプリが必要
 ## アンインストール
 mobox をアンインストールするには、`Backup and restore` メニューを使用する。
 ## デバッグ

@@ -22,7 +22,6 @@ Polski
 1. Zainstaluj
 [Termux](https://f-droid.org/repo/com.termux_118.apk),
 [Termux-X11](https://raw.githubusercontent.com/olegos2/mobox/main/components/termux-x11.apk) oraz
-[Input Bridge](https://raw.githubusercontent.com/olegos2/mobox/main/components/inputbridge.apk).
 
 2. Otwórz termux i wklej komendę
 ```bash
@@ -56,7 +55,6 @@ Jeżeli posiadasz roota, możesz użyć OOM Adjuster aby zapobiec ubijaniu proce
 * `Show additional keyboard` OFF
 * `Prefer scancodes when possible` ON
 ## Sterowanie
-Dla kontrolera dotykowego aplikacja Input Bridge jest wymagana
 ## Odinstalowywanie
 Aby odinstalować mobox, użyj `Backup and restore`.
 ## Debugowanie

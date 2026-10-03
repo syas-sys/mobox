@@ -22,7 +22,6 @@ Português Brasileiro
 1. Instale
 [Termux](https://f-droid.org/repo/com.termux_118.apk),
 [Termux-X11](https://raw.githubusercontent.com/olegos2/mobox/main/components/termux-x11.apk) e
-[Input Bridge](https://raw.githubusercontent.com/olegos2/mobox/main/components/inputbridge.apk).
 
 2. Abra o termux e cole o comando
 
@@ -57,7 +56,6 @@ Se você tiver root, poderá usar o OOM Adjuster, que é útil se o eliminador d
 * `Mostrar teclado adicional` DESLIGADO
 * `Preferir códigos de varredura quando possível` LIGADO
 ## Controles
-Para controles de toque, o aplicativo Input Bridge é necessário
 ## Desinstalar
 Para desinstalar o mobox, use o menu `Backup e restauração`.
 ## Depuração

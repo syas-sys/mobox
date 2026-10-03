@@ -22,7 +22,6 @@
 1. Установите
 [Termux](https://f-droid.org/repo/com.termux_118.apk),
 [Termux-X11](https://raw.githubusercontent.com/olegos2/mobox/main/components/termux-x11.apk) и
-[Input Bridge](https://raw.githubusercontent.com/olegos2/mobox/main/components/inputbridge.apk).
 
 2. Откройте termux и вставьте команду
 
@@ -57,7 +56,6 @@ Mesa VirGL, Turnip, Wine Mono и Gecko могут быть установлен�
 * `Show additional keyboard` OFF
 * `Prefer scancodes when possible` ON
 ## Управление
-Для сенсорного управления требуется приложение Input Bridge
 ## Удаление
 Используйте меню `Backup and restore` для удаления mobox.
 ## Отладка
