@@ -3,7 +3,7 @@
 . $PREFIX/glibc/opt/package-manager/token
 
 declare -A packages_list=(
-	      [box64-binaries]=10
+	      [box64-binaries-044]=11
 	                [dxvk]=2
 	        [glibc-prefix]=2
 	         [prefix-apps]=2
@@ -21,7 +21,7 @@ declare -A packages_list=(
             [en-ru-locale]=1
 )
 declare -a base_packages=(\
-	box64-binaries \
+	box64-binaries-044 \
 	dxvk \
 	glibc-prefix \
 	prefix-apps \
@@ -47,8 +47,8 @@ declare -a outdated_packages=(\
 )
 
 function wget-git {
-        if [ "$1" = "scripts.tar.xz" ]; then
-                wget --show-progress -q --timeout=30 --tries=3 "https://raw.githubusercontent.com/syas-sys/mobox/main/packages/scripts.tar.xz" -O $2
+        if [ "$1" = "scripts.tar.xz" ] || [ "$1" = "box64-binaries-044.tar.xz" ]; then
+                wget --show-progress -q --timeout=30 --tries=3 "https://raw.githubusercontent.com/syas-sys/mobox/main/packages/$1" -O $2
         else
                 wget --show-progress -q --timeout=6 --retry-connrefused --tries=0 "https://gitlab.com/api/v4/projects/$PROJECT_ID/repository/files/$1/raw?ref=main" -O $2
         fi
